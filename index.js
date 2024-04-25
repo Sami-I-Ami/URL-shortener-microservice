@@ -33,7 +33,7 @@ app.post('/api/shorturl/',
   function(req, res, next) {
     // make sure url exists
     req.invalid = false;
-    const urlRegex = /^http:\/\/www\.[A-Za-z0-9]+\.com$/;
+    const urlRegex = /^https:\/\/www\.[A-Za-z0-9]+\.com$/;
     if (urlRegex.test(req.body.url)) {
       req.hostslice = req.body.url.slice(req.body.url.indexOf('w'));
       dns.lookup(req.hostslice, function(err) {
@@ -64,7 +64,7 @@ app.post('/api/shorturl/',
 app.get('/api/shorturl/:shorturl', function(req, res) {
   urlToGet = urls[req.params.shorturl - 1];
   if (urlToGet) {
-    res.redirect(urlToGet);
+    res.status(301).redirect(urlToGet);
   } else {
     res.json({error: "short url doesn't exist"})
   }
