@@ -28,8 +28,8 @@ app.get('/api/hello', function(req, res) {
 // URL array
 urls = [];
 
-// URL shortener endpoint
-app.route('/api/shorturl/').post(
+// URL shortener post
+app.post('/api/shorturl/',
   function(req, res, next) {
     // make sure url exists
     req.invalid = false;
@@ -58,7 +58,17 @@ app.route('/api/shorturl/').post(
       });
     }
   }
-);
+)
+
+// URL shortener get
+app.get('/api/shorturl/:shorturl', function(req, res) {
+  urlToGet = urls[req.params.shorturl - 1];
+  if (urlToGet) {
+    res.redirect(urlToGet);
+  } else {
+    res.json({error: "short url doesn't exist"})
+  }
+});
 
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
