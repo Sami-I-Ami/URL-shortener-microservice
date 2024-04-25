@@ -22,15 +22,18 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+// URL array
+urls = [];
+
 // URL shortener endpoint
-app.route('/api/shorturl/:short-url').post(function (req, res) {
+app.route('/api/shorturl/').post(function (req, res) {
+  // add to url array
+  position = urls.push(req.body.url);
+  
   // output
   res.json({
-    original_url: "placeholder",
-    short_url: "placeholder"
-  })
-  .get(function (req, res) {
-
+    original_url: req.body.url,
+    short_url: position
   })
 });
 
