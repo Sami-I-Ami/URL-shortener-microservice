@@ -5,6 +5,7 @@ const dns = require('dns');
 const bodyParser = require('body-parser');
 const { sendStatus } = require('express/lib/response');
 const { hostname } = require('os');
+const { url } = require('inspector');
 const app = express();
 
 // Basic Configuration
@@ -26,14 +27,14 @@ app.get('/api/hello', function(req, res) {
 });
 
 // URL array
-urls = [];
+let urls = [];
 
 // URL shortener post
 app.post('/api/shorturl/',
   function(req, res, next) {
     // make sure url exists
     req.invalid = false;
-    const urlRegex = /^https:\/\/www\.[A-Za-z0-9]+\.com$/;
+    const urlRegex = /^https:\/\//;
     if (urlRegex.test(req.body.url)) {
       req.hostslice = req.body.url.slice(req.body.url.indexOf('w'));
       dns.lookup(req.hostslice, function(err) {
@@ -51,6 +52,7 @@ app.post('/api/shorturl/',
       res.json({error: 'invalid url'});
     } else {
       // add to url array
+      urlString = req.body.url.toString();
       position = urls.push(req.body.url);
       res.json({
         original_url: req.body.url,
